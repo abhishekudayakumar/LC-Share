@@ -1,4 +1,3 @@
-
 name: Build LC Share
 
 on:
@@ -63,4 +62,3 @@ jobs:
           path: dist/${{ matrix.binary }}
           if-no-files-found: error
           retention-days: 14
-          
