@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101010">
+  <title>LC Share</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #101010;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      padding: 24px;
+      border-bottom: 1px solid #383838;
+    }
+
+    .logo {
+      color: #d9b45b;
+      font-size: 27px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    main {
+      max-width: 850px;
+      margin: 45px auto;
+      padding: 20px;
+    }
+
+    .status {
+      color: #65d995;
+      font-size: 14px;
+    }
+
+    .panel {
+      background: #1b1b1b;
+      border: 1px solid #393939;
+      border-radius: 14px;
+      padding: 25px;
+      margin-top: 25px;
+    }
+
+    .action {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      margin-top: 15px;
+      background: #d9b45b;
+      border: 0;
+      border-radius: 8px;
+      color: #111;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .secondary {
+      background: #292929;
+      color: white;
+      border: 1px solid #555;
+    }
+
+    footer {
+      text-align: center;
+      color: #888;
+      padding: 35px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">LC SHARE</div>
+    <div>Private file sharing</div>
+  </header>
+
+  <main>
+    <h1>Welcome to LC Share</h1>
+    <p>Transfer files directly between your devices.</p>
+
+    <div class="panel">
+      <h2>Connection status</h2>
+      <p class="status">● Desktop server running</p>
+      <p>Version: 0.1.0</p>
+    </div>
+
+    <div class="panel">
+      <h2>File Transfer</h2>
+      <p>Connect another device to start sharing files.</p>
+      <button class="action" disabled>
+        Generate QR Code — Coming in Phase 3
+      </button>
+    </div>
+
+    <div class="panel">
+      <h2>Tools</h2>
+      <button class="action secondary" disabled>
+        File Converter — Coming Soon
+      </button>
+      <button class="action secondary" disabled>
+        OCR & Document Scanner — Coming Soon
+      </button>
+    </div>
+  </main>
+
+  <footer>LC SHARE · PRIVATE WORKSPACE</footer>
+</body>
+</html>
