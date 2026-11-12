@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#101010">
   <title>LC Share</title>
 
@@ -34,21 +32,37 @@
 
     main {
       max-width: 850px;
-      margin: 45px auto;
+      margin: 40px auto;
       padding: 20px;
-    }
-
-    .status {
-      color: #65d995;
-      font-size: 14px;
     }
 
     .panel {
       background: #1b1b1b;
       border: 1px solid #393939;
       border-radius: 14px;
-      padding: 25px;
-      margin-top: 25px;
+      padding: 24px;
+      margin-top: 22px;
+    }
+
+    .status {
+      font-weight: bold;
+    }
+
+    .online {
+      color: #65d995;
+    }
+
+    .offline {
+      color: #ff7777;
+    }
+
+    .checking {
+      color: #d9b45b;
+    }
+
+    .muted {
+      color: #999;
+      font-size: 13px;
     }
 
     .action {
@@ -70,6 +84,11 @@
       border: 1px solid #555;
     }
 
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     footer {
       text-align: center;
       color: #888;
@@ -89,31 +108,98 @@
     <h1>Welcome to LC Share</h1>
     <p>Transfer files directly between your devices.</p>
 
-    <div class="panel">
+    <section class="panel">
       <h2>Connection status</h2>
-      <p class="status">● Desktop server running</p>
-      <p>Version: 0.1.0</p>
-    </div>
 
-    <div class="panel">
+      <p id="serverStatus" class="status checking">
+        ● Checking server...
+      </p>
+
+      <p>Version: <strong id="appVersion">Checking...</strong></p>
+
+      <p class="muted" id="lastChecked">
+        Waiting for server response
+      </p>
+
+      <button class="action secondary" id="refreshButton"
+              onclick="checkServer()">
+        Refresh Status
+      </button>
+    </section>
+
+    <section class="panel">
       <h2>File Transfer</h2>
       <p>Connect another device to start sharing files.</p>
-      <button class="action" disabled>
-        Generate QR Code — Coming in Phase 3
-      </button>
-    </div>
 
-    <div class="panel">
+      <button class="action" disabled>
+        Generate QR Code — Coming Soon
+      </button>
+    </section>
+
+    <section class="panel">
       <h2>Tools</h2>
+
       <button class="action secondary" disabled>
         File Converter — Coming Soon
       </button>
+
       <button class="action secondary" disabled>
         OCR & Document Scanner — Coming Soon
       </button>
-    </div>
+    </section>
   </main>
 
-  <footer>LC SHARE · PRIVATE WORKSPACE</footer>
+  <footer>LC SHARE · PRIVATE WORKSPACE · v0.2.0</footer>
+
+  <script>
+    const statusElement = document.getElementById("serverStatus");
+    const versionElement = document.getElementById("appVersion");
+    const checkedElement = document.getElementById("lastChecked");
+    const refreshButton = document.getElementById("refreshButton");
+
+    async function checkServer() {
+      statusElement.textContent = "● Checking server...";
+      statusElement.className = "status checking";
+      refreshButton.disabled = true;
+
+      try {
+        const response = await fetch("/api/status", {
+          method: "GET",
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("Server returned HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "online") {
+          throw new Error("Unexpected server status");
+        }
+
+        statusElement.textContent = "● Backend online";
+        statusElement.className = "status online";
+        versionElement.textContent = data.version || "Unknown";
+
+        checkedElement.textContent =
+          "Last checked: " + new Date().toLocaleTimeString();
+
+      } catch (error) {
+        statusElement.textContent = "● Backend unavailable";
+        statusElement.className = "status offline";
+        versionElement.textContent = "Unavailable";
+
+        checkedElement.textContent =
+          "Connection error: " + error.message;
+
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+
+    checkServer();
+    setInterval(checkServer, 5000);
+  </script>
 </body>
 </html>
