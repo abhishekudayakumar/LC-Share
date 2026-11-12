@@ -35,12 +35,20 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.23.x'
-          cache: true
+          cache: false
 
-      - name: Check formatting
+      - name: Check Go formatting
         shell: bash
         run: |
-          test -z "$(gofmt -l .)"
+          files=$(git ls-files '*.go')
+          if [ -n "$files" ]; then
+            unformatted=$(gofmt -l $files)
+            if [ -n "$unformatted" ]; then
+              echo "These Go files need gofmt:"
+              echo "$unformatted"
+              exit 1
+            fi
+          fi
 
       - name: Run tests
         run: go test ./...
@@ -52,8 +60,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p dist
-          go build -trimpath -ldflags="-s -w" \
-            -o "dist/${{ matrix.binary }}" .
+          go build -trimpath -ldflags="-s -w" -o "dist/${{ matrix.binary }}" .
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
