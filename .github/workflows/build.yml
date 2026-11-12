@@ -38,6 +38,7 @@ jobs:
           cache: false
 
       - name: Check Go formatting
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           files=$(git ls-files '*.go')
